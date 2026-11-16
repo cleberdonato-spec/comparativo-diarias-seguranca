@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparativo de Diárias — 2025 x 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #ffffff;
+    --surface: #fafafb;
+    --ink: #1c2126;
+    --muted: #68707a;
+    --line: #e2e5e9;
+    --accent: #263a52;
+    --accent-soft: #eef1f4;
+    --warn: #7a5a3a;
+    --warn-soft: #f2ede6;
+    --old: #9aa1aa;
+    --old-soft: #eef0f2;
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    color-scheme: light;
+  }
+  /* fundo branco fixo, independente do tema do sistema */
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:var(--display); font-weight:600; text-wrap:balance; margin:0;}
+  .tnum{font-variant-numeric:tabular-nums;}
+  a{color:var(--accent);}
+
+  #progress{position:fixed; top:0; left:0; height:3px; background:var(--accent); z-index:60; width:0%;}
+
+  header.topbar{
+    position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between;
+    padding:14px 7vw; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  header.topbar .brand{font-weight:700; font-size:14px; letter-spacing:.01em;}
+  header.topbar nav{display:flex; gap:22px;}
+  header.topbar nav a{
+    font-size:13.5px; color:var(--muted); text-decoration:none; font-weight:500;
+    padding:4px 0; border-bottom:2px solid transparent; transition:color .15s, border-color .15s;
+  }
+  header.topbar nav a.active{color:var(--ink); border-color:var(--accent);}
+  header.topbar nav a:hover{color:var(--ink);}
+
+  main{max-width:880px; margin:0 auto; padding:0 7vw;}
+  section{padding:76px 0; border-bottom:1px solid var(--line); scroll-margin-top:72px;}
+  section:last-of-type{border-bottom:none;}
+  section.hero{padding-top:88px; padding-bottom:88px;}
+
+  .eyebrow{font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin-bottom:12px;}
+  h2{font-size:clamp(26px,3.6vw,38px); margin-bottom:14px;}
+  .lede{font-size:17px; color:var(--muted); max-width:640px; line-height:1.6; margin-bottom:0;}
+
+  .kpi-row{display:flex; gap:16px; flex-wrap:wrap; margin-top:28px;}
+  .kpi{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px 22px;
+    flex:1 1 200px; min-width:180px;
+  }
+  .kpi .label{font-size:12.5px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.04em;}
+  .kpi .value{font-family:var(--display); font-size:clamp(22px,2.4vw,32px); margin-top:6px; font-weight:600;}
+  .kpi .value.accent{color:var(--accent);}
+  .kpi .value.warn{color:var(--warn);}
+  .kpi .value.old{color:var(--old);}
+  .kpi .sub{font-size:13px; color:var(--muted); margin-top:4px;}
+
+  table.data{width:100%; border-collapse:collapse; font-size:14.5px; background:var(--surface); border-radius:12px; overflow:hidden; border:1px solid var(--line); margin-top:28px;}
+  table.data th, table.data td{padding:11px 16px; text-align:left; border-bottom:1px solid var(--line);}
+  table.data th{font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); font-weight:700; background:var(--bg);}
+  table.data td.num{text-align:right; font-variant-numeric:tabular-nums;}
+  table.data tr:last-child td{border-bottom:none;}
+  table.data tr.total td{font-weight:700; border-top:2px solid var(--line); background:var(--bg);}
+  .pill{display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:20px; background:var(--old-soft); color:var(--old); margin-left:6px; white-space:nowrap;}
+  .footnote{font-size:12.5px; color:var(--muted); margin-top:16px; line-height:1.6; max-width:680px;}
+
+  .chart{display:flex; align-items:flex-end; gap:40px; height:240px; padding:24px 10px 0; border-bottom:1px solid var(--line); margin-top:28px;}
+  .bar-col{display:flex; flex-direction:column; align-items:center; justify-content:flex-end; flex:1; height:100%;}
+  .bar{width:72px; border-radius:8px 8px 0 0; height:0; transition:height 1s cubic-bezier(.2,.8,.2,1);}
+  .bar.old{background:var(--old);}
+  .bar.now{background:var(--accent);}
+  .bar.proj{background:var(--warn);}
+  .bar-value{font-weight:700; font-size:15px; margin-bottom:8px; font-variant-numeric:tabular-nums;}
+  .bar-label{font-size:13px; color:var(--muted); margin-top:10px; text-align:center;}
+
+  footer{padding:40px 0 60px; color:var(--muted); font-size:13px; text-align:center;}
+
+  @media (max-width:720px){
+    header.topbar nav{display:none;}
+    main{padding:0 6vw;}
+    section{padding:56px 0;}
+    .chart{gap:18px;}
+    .bar{width:46px;}
+  }
+  @media (prefers-reduced-motion: reduce){ .bar{transition:none;} }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<header class="topbar">
+  <span class="brand">Operação de Segurança — Diárias</span>
+  <nav id="sectionNav">
+    <a href="#contexto-2025" data-target="contexto-2025">2025</a>
+    <a href="#mudanca-2026" data-target="mudanca-2026">2026</a>
+    <a href="#resultado-atual" data-target="resultado-atual">Resultado</a>
+    <a href="#proposta-reajuste" data-target="proposta-reajuste">Reajuste</a>
+    <a href="#resumo" data-target="resumo">Resumo</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="capa">
+    <div class="eyebrow">Comparativo de custos</div>
+    <h2 style="font-size:clamp(32px,5vw,50px)">Diárias da equipe de segurança<br>2025 → 2026</h2>
+    <p class="lede">Como a reestruturação da equipe reduziu o custo mensal em 44,7% — e por que ainda sobra economia mesmo com o reajuste de diária proposto.</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Custo em 2025</div><div class="value old tnum">R$ 41.968,15</div><div class="sub">6 prestadores fixos</div></div>
+      <div class="kpi"><div class="label">Custo atual (2026)</div><div class="value accent tnum">R$ 23.200,00</div><div class="sub">equipe por diária</div></div>
+      <div class="kpi"><div class="label">Economia obtida</div><div class="value accent tnum">44,7%</div><div class="sub">R$ 18.768,15/mês</div></div>
+    </div>
+  </section>
+
+  <section id="contexto-2025">
+    <div class="eyebrow">01 · Ponto de partida</div>
+    <h2>A estrutura em 2025</h2>
+    <p class="lede">Seis prestadores com remuneração fixa mensal, independente dos dias efetivamente trabalhados.</p>
+    <table class="data">
+      <thead><tr><th>Colaborador</th><th style="text-align:right">Valor mensal</th></tr></thead>
+      <tbody>
+        <tr><td>Orro</td><td class="num tnum">R$ 7.596,98</td></tr>
+        <tr><td>Douglas</td><td class="num tnum">R$ 7.596,98</td></tr>
+        <tr><td>Iasbech</td><td class="num tnum">R$ 6.924,73</td></tr>
+        <tr><td>Antônio</td><td class="num tnum">R$ 6.924,73</td></tr>
+        <tr><td>Luis</td><td class="num tnum">R$ 6.924,73</td></tr>
+        <tr><td>Reinaldo</td><td class="num tnum">R$ 6.000,00</td></tr>
+        <tr class="total"><td>Total mensal</td><td class="num tnum">R$ 41.968,15</td></tr>
+      </tbody>
+    </table>
+    <p class="footnote">Modelo fixo: o valor não varia com dias trabalhados, folgas ou faltas.</p>
+  </section>
+
+  <section id="mudanca-2026">
+    <div class="eyebrow">02 · O que mudou</div>
+    <h2>Nova equipe, novo modelo</h2>
+    <p class="lede">A equipe anterior foi desligada. A operação passou a funcionar por <strong>diária</strong>: R$ 500 em dia útil e R$ 700 em fim de semana, pagos apenas pelos dias efetivamente trabalhados.</p>
+    <table class="data">
+      <thead><tr><th>Colaborador</th><th>Dias extras no mês</th><th style="text-align:right">Valor no mês</th></tr></thead>
+      <tbody>
+        <tr><td>Rodrigo Orro</td><td>9</td><td class="num tnum">R$ 5.600,00</td></tr>
+        <tr><td>Antônio</td><td>9</td><td class="num tnum">R$ 5.600,00</td></tr>
+        <tr><td>Douglas Avancini</td><td>7</td><td class="num tnum">R$ 4.100,00</td></tr>
+        <tr><td>Iasbech</td><td>7 <span class="pill">+2 noturno/viagem</span></td><td class="num tnum">R$ 4.900,00</td></tr>
+        <tr><td>Weberth</td><td>6</td><td class="num tnum">R$ 3.000,00</td></tr>
+        <tr><td>Pedro</td><td>0</td><td class="num tnum">R$ 0,00</td></tr>
+        <tr><td>Paulo <span class="pill">escritório</span></td><td>26</td><td class="num">contabilizado à parte</td></tr>
+        <tr class="total"><td>Total mensal (sem Paulo)</td><td></td><td class="num tnum">R$ 23.200,00</td></tr>
+      </tbody>
+    </table>
+    <p class="footnote">Paulo é remunerado por outra rubrica, lançada diretamente pelo escritório — por isso fica fora da soma de diárias. Pedro não teve diárias extras registradas no período.</p>
+  </section>
+
+  <section id="resultado-atual" data-bar-max="41968.15">
+    <div class="eyebrow">03 · Resultado</div>
+    <h2>De R$ 41.968 para R$ 23.200</h2>
+    <p class="lede">A troca de modelo — de remuneração fixa para diária por dia trabalhado — já gera uma economia relevante todo mês.</p>
+    <div class="chart">
+      <div class="bar-col">
+        <div class="bar-value tnum">R$ 41.968,15</div>
+        <div class="bar old" data-h></div>
+        <div class="bar-label">2025<br><span class="pill">referência</span></div>
+      </div>
+      <div class="bar-col">
+        <div class="bar-value tnum">R$ 23.200,00</div>
+        <div class="bar now" data-h></div>
+        <div class="bar-label">2026 atual</div>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Economia mensal</div><div class="value accent tnum">R$ 18.768,15</div></div>
+      <div class="kpi"><div class="label">Redução percentual</div><div class="value accent tnum">44,7%</div></div>
+      <div class="kpi"><div class="label">Economia anual projetada</div><div class="value accent tnum">R$ 225.217,80</div></div>
+    </div>
+  </section>
+
+  <section id="proposta-reajuste">
+    <div class="eyebrow">04 · Proposta</div>
+    <h2>Reajuste da diária</h2>
+    <p class="lede">Para compensar o aumento no custo de combustível, propõe-se elevar a diária: dia útil de R$ 500 para <strong>R$ 650</strong> (+R$150), fim de semana de R$ 700 para <strong>R$ 800</strong> (+R$100).</p>
+    <table class="data">
+      <thead><tr><th>Colaborador</th><th style="text-align:right">Valor atual</th><th style="text-align:right">Incremento</th><th style="text-align:right">Novo valor</th></tr></thead>
+      <tbody>
+        <tr><td>Rodrigo Orro</td><td class="num tnum">R$ 5.600,00</td><td class="num tnum">+ R$ 1.200,00</td><td class="num tnum">R$ 6.800,00</td></tr>
+        <tr><td>Antônio</td><td class="num tnum">R$ 5.600,00</td><td class="num tnum">+ R$ 1.200,00</td><td class="num tnum">R$ 6.800,00</td></tr>
+        <tr><td>Douglas Avancini</td><td class="num tnum">R$ 4.100,00</td><td class="num tnum">+ R$ 900,00</td><td class="num tnum">R$ 5.000,00</td></tr>
+        <tr><td>Iasbech</td><td class="num tnum">R$ 4.900,00</td><td class="num tnum">+ R$ 950,00</td><td class="num tnum">R$ 5.850,00</td></tr>
+        <tr><td>Weberth</td><td class="num tnum">R$ 3.000,00</td><td class="num tnum">+ R$ 750,00</td><td class="num tnum">R$ 3.750,00</td></tr>
+        <tr class="total"><td>Total mensal</td><td class="num tnum">R$ 23.200,00</td><td class="num tnum">+ R$ 5.000,00</td><td class="num tnum">R$ 28.200,00</td></tr>
+      </tbody>
+    </table>
+    <p class="footnote">Incremento calculado sobre os dias efetivamente trabalhados por pessoa no período (dias úteis × R$150 + dias de fim de semana × R$100).</p>
+  </section>
+
+  <section id="resultado-projetado" data-bar-max="41968.15">
+    <div class="eyebrow">05 · Mesmo com o reajuste</div>
+    <h2>A economia continua</h2>
+    <p class="lede">Mesmo aplicando o reajuste pedido pela equipe, o custo total fica muito abaixo do modelo de 2025.</p>
+    <div class="chart">
+      <div class="bar-col">
+        <div class="bar-value tnum">R$ 41.968,15</div>
+        <div class="bar old" data-h></div>
+        <div class="bar-label">2025<br><span class="pill">referência</span></div>
+      </div>
+      <div class="bar-col">
+        <div class="bar-value tnum">R$ 23.200,00</div>
+        <div class="bar now" data-h></div>
+        <div class="bar-label">2026 atual</div>
+      </div>
+      <div class="bar-col">
+        <div class="bar-value tnum">R$ 28.200,00</div>
+        <div class="bar proj" data-h></div>
+        <div class="bar-label">2026<br>com reajuste</div>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Custo extra do reajuste</div><div class="value warn tnum">+ R$ 5.000,00</div><div class="sub">vs. modelo atual</div></div>
+      <div class="kpi"><div class="label">Economia ainda assim</div><div class="value accent tnum">R$ 13.768,15</div><div class="sub">vs. 2025</div></div>
+      <div class="kpi"><div class="label">Redução percentual</div><div class="value accent tnum">32,8%</div><div class="sub">vs. 2025</div></div>
+    </div>
+  </section>
+
+  <section id="resumo">
+    <div class="eyebrow">06 · Resumo para decisão</div>
+    <h2>O argumento em uma tela</h2>
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">2025 (referência)</div><div class="value old tnum">R$ 41.968,15</div></div>
+      <div class="kpi"><div class="label">2026 atual</div><div class="value accent tnum">R$ 23.200,00</div><div class="sub">−44,7%</div></div>
+      <div class="kpi"><div class="label">2026 com reajuste</div><div class="value warn tnum">R$ 28.200,00</div><div class="sub">−32,8% vs. 2025</div></div>
+    </div>
+    <p class="lede" style="margin-top:28px">Conceder o reajuste de R$150 (dia útil) e R$100 (fim de semana) custa R$ 5.000,00 a mais por mês — mas a operação segue R$ 13.768,15 mais barata do que em 2025. A redução de custo já conquistada financia a maior parte do aumento pedido.</p>
+    <p class="footnote">
+      Observações: Paulo é lançado separadamente pelo escritório e não entra nas somas acima · Pedro não registrou diárias extras no período · os valores de Iasbech incluem dois lançamentos adicionais (atuação noturna e viagem extra) somados fora do padrão dia útil/fim de semana.
+    </p>
+  </section>
+
+  <footer>Comparativo de Diárias — equipe de segurança · 2025–2026</footer>
+
+</main>
+
+<script>
+(function(){
+  var progress = document.getElementById('progress');
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('#sectionNav a'));
+  var sections = navLinks.map(function(a){ return document.getElementById(a.dataset.target); });
+  var barSections = Array.prototype.slice.call(document.querySelectorAll('section[data-bar-max]'));
+  var animated = new WeakSet();
+
+  function onScroll(){
+    var doc = document.documentElement;
+    var scrollTop = window.scrollY || doc.scrollTop;
+    var max = doc.scrollHeight - doc.clientHeight;
+    progress.style.width = (max > 0 ? (scrollTop / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  function setActiveLink(){
+    var pos = window.scrollY + 110;
+    var current = null;
+    sections.forEach(function(s, i){
+      if(s && s.offsetTop <= pos){ current = i; }
+    });
+    navLinks.forEach(function(a, i){ a.classList.toggle('active', i === current); });
+  }
+  window.addEventListener('scroll', setActiveLink, {passive:true});
+  setActiveLink();
+
+  function animateBars(section){
+    if(animated.has(section)) return;
+    animated.add(section);
+    var max = parseFloat(section.getAttribute('data-bar-max')) || 0;
+    var bars = section.querySelectorAll('.bar[data-h]');
+    bars.forEach(function(bar){
+      var valueEl = bar.parentElement.querySelector('.bar-value');
+      var raw = valueEl ? valueEl.textContent.replace(/[^\d,]/g,'').replace(',','.') : '0';
+      var val = parseFloat(raw) || 0;
+      var pct = max ? Math.max(4, (val / max) * 92) : 0;
+      requestAnimationFrame(function(){ bar.style.height = pct + '%'; });
+    });
+  }
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ animateBars(entry.target); }
+      });
+    }, {threshold:.35});
+    barSections.forEach(function(s){ io.observe(s); });
+  } else {
+    barSections.forEach(animateBars);
+  }
+})();
+</script>
+
+</body>
+</html>
